@@ -29,7 +29,18 @@
 /* El diagnóstico ocupa su propia fila y deja libre toda la mesa. */
 .hint{position:relative;left:auto;bottom:auto;transform:none;width:auto;grid-column:2;margin:0;align-self:start}
 @media(max-width:800px){.hint{grid-column:1}}
-</style><link rel="stylesheet" href="mobile-pwa.css"></head><body><main>
+@media(max-width:950px) and (orientation:landscape){.device{pointer-events:none}.device .terminal,.device .key{pointer-events:auto}.terminal:before{content:"";position:absolute;inset:-13px!important;border-radius:50%}}
+</style><link rel="stylesheet" href="mobile-pwa.css"><style>
+@media(max-width:950px) and (orientation:landscape){
+ .terminal{width:60px!important;height:60px!important;min-width:60px!important;min-height:60px!important;padding:0;border:0;background:transparent;box-shadow:none;transform:translate(-13px,-13px);appearance:none}
+ .terminal::before{content:"";position:absolute;inset:auto;left:50%;top:50%;width:34px;height:34px;transform:translate(-50%,-50%);border:4px solid #d5deea;border-radius:50%;background:#14243a;box-shadow:0 0 0 4px #14243a,0 3px 10px #0009;pointer-events:none}
+ .terminal::after{content:"";position:absolute;inset:auto;left:50%;top:50%;width:12px;height:12px;transform:translate(-50%,-50%);border-radius:50%;background:#d89559;pointer-events:none}
+ .terminal.connected::after{background:var(--gr)}.terminal.active{box-shadow:none}.terminal.active::before{box-shadow:0 0 0 7px #56bdf080,0 3px 10px #0009}
+ .s1b,.s2b,.s3b{transform:translate(13px,-13px)}
+ .key::after{content:"";position:absolute;left:50%;top:50%;width:84px;height:58px;transform:translate(-50%,-50%);background:transparent}
+ .key-module{gap:28px}.s1a,.s1b{top:0}.s2a,.s2b{top:58px}.s3a,.s3b{top:116px}
+}
+</style></head><body><main>
 <header><div><h1>Llave de tres puntos</h1><p>Conecta tres lámparas y contrólalas de forma independiente.</p></div><div id="status" class="status"><i></i><span id="statusText">Cable marrón seleccionado</span></div></header>
 <div class="layout"><aside class="panel"><h2>Bobinas de cable</h2><p>Selecciona una y arrastra entre dos bornes.</p>
 <button class="choice" data-type="brown" aria-pressed="true"><span class="sample brown"></span><strong>Marrón · Fase</strong><small>Equivale a + en esta práctica</small><span id="brownLeft" class="left-count"></span></button>
@@ -69,6 +80,28 @@ function diagnose(){const now=solve(keyState),off=solve([false,false,false]),sin
  else if(all.metrics.every(m=>m.rel>.05&&m.rel<.2)){head='Lámparas en serie';text='Los tres focos quedaron encadenados. Deben formar tres ramas controladas de manera independiente.'}
  else{head='Conexión cruzada';text='Cada tecla posee dos bornes propios y no hay unión común interna. Revisa los seis bornes y los dos puentes externos.'}return{now,cls,head,text}}
 function update(){const d=diagnose();lamps.forEach((l,i)=>{const m=d.now.metrics[i],level=Math.min(1,Math.sqrt(m.rel));l.classList.toggle('on',m.rel>.01);l.querySelector('.bulb').style.setProperty('--level',level.toFixed(2))});battery.classList.toggle('short',d.now.short);keys.forEach((k,i)=>{k.classList.toggle('on',keyState[i]);k.setAttribute('aria-pressed',String(keyState[i]))});status.className='status'+(d.now.short?' error':d.cls==='hint ok'?' on':links.length?' ready':'');statusText.textContent=d.head;hint.className=d.cls;hint.innerHTML='<strong>'+d.head+':</strong> '+d.text;count.textContent=links.length+' cable'+(links.length===1?'':'s');undo.disabled=!links.length;document.querySelector('#brownLeft').textContent='Uso libre · '+links.filter(l=>l.type==='brown').length+' colocado(s)';document.querySelector('#blueLeft').textContent='Uso libre · '+links.filter(l=>l.type==='blue').length+' colocado(s)';terms.forEach(t=>t.classList.toggle('connected',links.some(l=>l.a===t.dataset.id||l.b===t.dataset.id)))}
-function randomLayout(){const topSlots=[[18,22],[78,22]].sort(()=>Math.random()-.5),lampSlots=[[18,67],[50,67],[82,67]].sort(()=>Math.random()-.5),place=(d,a,jx,jy)=>{const rot=Math.round(Math.random()*24-12);d.style.left=(a[0]+Math.random()*jx-jx/2)+'%';d.style.top=(a[1]+Math.random()*jy-jy/2)+'%';d.style.right='auto';d.style.bottom='auto';d.style.transform='translate(-50%,-50%) rotate('+rot+'deg)'};place(battery,topSlots[0],7,7);place(sw,topSlots[1],7,7);lamps.forEach((lamp,i)=>place(lamp,lampSlots[i],5,5));const end=performance.now()+900;function follow(){draw();if(performance.now()<end)requestAnimationFrame(follow)}follow()}function reset(){links=[];drag=null;keyState=[false,false,false];randomLayout();update();draw()}
-terms.forEach(t=>t.addEventListener('pointerdown',start));board.addEventListener('pointermove',move);board.addEventListener('pointerup',end);board.addEventListener('pointercancel',end);keys.forEach((k,i)=>k.onclick=()=>{keyState[i]=!keyState[i];play('switch');update();const d=diagnose();if(d.now.short)play('short');else if(d.cls==='hint ok')play('success');draw()});undo.onclick=()=>{if(links.length){links.pop();play('remove');update();draw()}};sound.onclick=()=>{audioEnabled=!audioEnabled;sound.setAttribute('aria-pressed',String(audioEnabled));sound.textContent=audioEnabled?'🔊 Sonidos':'🔇 Silenciado'};document.querySelector('#reset').onclick=()=>{play('remove');reset()};new ResizeObserver(draw).observe(board);reset()})();
+function randomLayout(){
+ const mobile=matchMedia('(max-width:950px) and (orientation:landscape)').matches;
+ if(!mobile){
+  const topSlots=[[18,22],[78,22]].sort(()=>Math.random()-.5),lampSlots=[[18,67],[50,67],[82,67]].sort(()=>Math.random()-.5),place=(d,a,jx,jy)=>{const rot=Math.round(Math.random()*24-12);d.style.left=(a[0]+Math.random()*jx-jx/2)+'%';d.style.top=(a[1]+Math.random()*jy-jy/2)+'%';d.style.right='auto';d.style.bottom='auto';d.style.transform='translate(-50%,-50%) rotate('+rot+'deg)'};place(battery,topSlots[0],7,7);place(sw,topSlots[1],7,7);lamps.forEach((lamp,i)=>place(lamp,lampSlots[i],5,5));
+ }else{
+  const mirror=Math.random()<.5,headSlots=mirror?[[90,50],[62,50]]:[[10,50],[38,50]],lampSlots=(mirror?[[47,50],[27,50],[7,50]]:[[53,50],[73,50],[93,50]]).sort(()=>Math.random()-.5);
+  const placeSafe=(device,anchor)=>{
+   const oldStyle=getComputedStyle(device),oldLeft=oldStyle.left,oldTop=oldStyle.top,oldTransform=oldStyle.transform;
+   device.getAnimations().forEach(animation=>animation.cancel());
+   const x=anchor[0]+(Math.random()*2-1),y=anchor[1]+(Math.random()*3-1.5),rotation=0;
+   let offsetX=0,offsetY=0;
+   device.style.transition='none';device.style.right='auto';device.style.bottom='auto';device.style.transform='translate(-50%,-50%) rotate('+rotation+'deg)';
+   const applyPosition=()=>{device.style.left='calc('+x+'% + '+offsetX+'px)';device.style.top='calc('+y+'% + '+offsetY+'px)'};
+   const visibleBounds=()=>{const r=device.getBoundingClientRect(),bounds={left:r.left-4,right:r.right+4,top:r.top-4,bottom:r.bottom+4};device.querySelectorAll('*').forEach(element=>{const er=element.getBoundingClientRect();if(!er.width&&!er.height)return;if(element.classList.contains('terminal')){const cx=er.left+er.width/2,cy=er.top+er.height/2;bounds.left=Math.min(bounds.left,cx-22);bounds.right=Math.max(bounds.right,cx+22);bounds.top=Math.min(bounds.top,cy-22);bounds.bottom=Math.max(bounds.bottom,cy+22)}else{bounds.left=Math.min(bounds.left,er.left-2);bounds.right=Math.max(bounds.right,er.right+2);bounds.top=Math.min(bounds.top,er.top-2);bounds.bottom=Math.max(bounds.bottom,er.bottom+2)}});return bounds};
+   applyPosition();
+   for(let pass=0;pass<3;pass++){const br=board.getBoundingClientRect(),b=visibleBounds(),zoom=parseFloat(getComputedStyle(device).zoom)||1;let dx=0,dy=0;if(b.left<br.left+6)dx=br.left+6-b.left;if(b.right+dx>br.right-6)dx+=br.right-6-(b.right+dx);if(b.top<br.top+6)dy=br.top+6-b.top;if(b.bottom+dy>br.bottom-6)dy+=br.bottom-6-(b.bottom+dy);if(Math.abs(dx)<.5&&Math.abs(dy)<.5)break;offsetX+=dx/zoom;offsetY+=dy/zoom;applyPosition()}
+   const finalStyle=getComputedStyle(device),finalLeft=finalStyle.left,finalTop=finalStyle.top,finalTransform=finalStyle.transform;device.style.transition='';
+   device.animate([{left:oldLeft,top:oldTop,transform:oldTransform},{left:finalLeft,top:finalTop,transform:finalTransform}],{duration:780,easing:'cubic-bezier(.22,.8,.25,1)'})
+  };
+  placeSafe(battery,headSlots[0]);placeSafe(sw,headSlots[1]);lamps.forEach((lamp,i)=>placeSafe(lamp,lampSlots[i]));
+ }
+ const end=performance.now()+900;function follow(){draw();if(performance.now()<end)requestAnimationFrame(follow)}follow()
+}function reset(){links=[];drag=null;keyState=[false,false,false];randomLayout();update();draw()}
+terms.forEach(t=>t.addEventListener('pointerdown',start));board.addEventListener('pointermove',move);board.addEventListener('pointerup',end);board.addEventListener('pointercancel',end);keys.forEach((k,i)=>k.onclick=()=>{keyState[i]=!keyState[i];play('switch');update();const d=diagnose();if(d.now.short)play('short');else if(d.cls==='hint ok')play('success');draw()});undo.onclick=()=>{if(links.length){links.pop();play('remove');update();draw()}};sound.onclick=()=>{audioEnabled=!audioEnabled;sound.setAttribute('aria-pressed',String(audioEnabled));sound.textContent=audioEnabled?'🔊 Sonidos':'🔇 Silenciado'};document.querySelector('#reset').onclick=()=>{play('remove');reset()};let observedBoardSize=board.clientWidth+'x'+board.clientHeight,reflowFrame=0;new ResizeObserver(()=>{draw();const size=board.clientWidth+'x'+board.clientHeight;if(size===observedBoardSize)return;observedBoardSize=size;cancelAnimationFrame(reflowFrame);reflowFrame=requestAnimationFrame(()=>{if(matchMedia('(max-width:950px) and (orientation:landscape)').matches)randomLayout()})}).observe(board);reset()})();
 </script></body></html>

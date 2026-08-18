@@ -77,6 +77,18 @@ html,body{height:100%;overflow:hidden}body{min-height:0;padding:8px 12px}main{he
 .combo-unit.current1 .key1 .bridge1,.combo-unit.current2 .key2 .bridge2{background:linear-gradient(90deg,#c86a2e,#fff3a2,#67eaff,#fff3a2,#c86a2e);box-shadow:0 0 12px #63eaff,0 0 5px #fff6b0;animation:switch-electrons .55s linear infinite}
 @keyframes switch-electrons{50%{filter:brightness(1.65)}to{background-position:135px 0}}
 .sw1-in{left:32px;top:40px}.sw1-out{left:167px;top:40px}.sw2-in{left:32px;top:100px}.sw2-out{left:167px;top:100px}
+/* Zonas táctiles móviles: conservan el centro eléctrico y el tamaño visual. */
+@media(max-width:950px) and (orientation:landscape){
+.terminal{width:84px!important;height:84px!important;min-width:84px!important;min-height:84px!important;margin-left:-25px;margin-top:-25px;padding:0;border:0;background:transparent;box-shadow:none;cursor:crosshair}
+.terminal:after{content:"";position:absolute;inset:auto;left:25px;top:25px;width:34px;height:34px;border:4px solid #d5deea;border-radius:50%;background:radial-gradient(circle,#d89559 0 18%,#14243a 22% 52%,#d5deea 56% 70%,#14243a 74%);box-shadow:0 0 0 4px #14243a,0 3px 10px #0009}
+.terminal.connected:after{background:radial-gradient(circle,var(--gr) 0 22%,#183a36 27% 52%,#d5deea 56% 70%,#14243a 74%);box-shadow:0 0 0 4px #14243a,0 0 12px #5ce0a099}.terminal.connected,.terminal.active{box-shadow:none;transform:none}.terminal.active:after{box-shadow:0 0 0 7px #56bdf080,0 0 13px #73dcff}
+.combo-unit .terminal{margin-left:-26.5px;margin-top:-26.5px}.combo-unit .terminal:after{left:26.5px;top:26.5px;width:31px;height:31px}
+.rail-tap{margin-left:0!important;margin-top:-25px!important}.bus:after{content:"";position:absolute;left:0;right:0;top:50%;height:70px;transform:translateY(-50%);background:transparent}
+.one-key{z-index:20}.one-key:after{content:"";position:absolute;left:50%;top:50%;width:178px;height:82px;transform:translate(-50%,-50%);background:transparent}
+.plug{width:92px;height:92px;margin-left:-28.5px;margin-top:-34.5px;border:0;border-radius:0;background:transparent;box-shadow:none}
+.plug:before{content:"";position:absolute;left:28.5px;top:34.5px;width:35px;height:23px;border-radius:5px;background:#222d38;box-shadow:0 4px 7px #0008}
+.plug:after{content:"";position:absolute;left:36.5px;top:25.5px;width:5px;height:12px;background:#d9dfe4;box-shadow:19px 0 #d9dfe4}
+}
 </style><link rel="stylesheet" href="mobile-pwa.css"></head><body><main>
 <header><div><h1>Circuito 2P y T</h1><p>Dos llaves independientes, dos focos y un tomacorriente con tierra.</p></div><div id="status" class="status"><i></i><span id="statusText">Fase seleccionada</span></div></header>
 <div class="layout"><aside class="panel"><h2>Bobinas de cable</h2><p>Selecciona una y arrastra entre dos bornes.</p>

@@ -3,8 +3,9 @@
   html,body{width:100%;height:100%;overflow:hidden!important}
   body{min-height:0!important;padding:max(3px,env(safe-area-inset-top)) max(5px,env(safe-area-inset-right)) max(3px,env(safe-area-inset-bottom)) max(5px,env(safe-area-inset-left))!important}
   main{width:100%;height:100%;max-width:none!important;display:flex!important;flex-direction:column!important;min-height:0!important}
-  header{flex:0 0 auto!important;min-height:31px;margin-bottom:3px!important;gap:6px!important;align-items:center!important;flex-direction:row!important;justify-content:space-between!important}
-  h1{font-size:1rem!important;line-height:1.05!important}
+  header{flex:0 0 auto!important;min-height:48px;margin-bottom:3px!important;padding-right:104px!important;gap:6px!important;align-items:center!important;flex-direction:row!important;justify-content:space-between!important}
+  header>div:first-child{min-width:0!important}
+  h1{font-size:1rem!important;line-height:1.05!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
   header p,.safety{display:none!important}
   .status{padding:5px 8px!important;border-radius:9px!important;font-size:.67rem!important}
   .layout{flex:1 1 auto!important;grid-template-columns:clamp(132px,19vw,162px) minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr) auto!important;gap:4px!important;min-width:0!important;min-height:0!important}
@@ -12,8 +13,8 @@
   .panel h2{font-size:.75rem!important;margin-bottom:2px!important}
   .panel>p{display:none!important}
   .challenge{gap:3px!important;margin-bottom:4px!important}
-  .challenge button{padding:4px 2px!important;min-height:31px!important;font-size:.62rem!important;border-radius:7px!important}
-  .choice{min-height:43px!important;padding:5px!important;margin-bottom:4px!important;border-radius:9px!important;font-size:.67rem!important}
+  .challenge button{padding:4px 2px!important;min-height:44px!important;font-size:.62rem!important;border-radius:7px!important}
+  .choice{min-height:44px!important;padding:5px!important;margin-bottom:4px!important;border-radius:9px!important;font-size:.67rem!important}
   .choice small{display:none!important}
   .sample{height:7px!important;margin-bottom:4px!important}
   .left-count{font-size:.55rem!important;margin-top:1px!important}
@@ -28,7 +29,7 @@
   .board .lamp{zoom:.74}
   .rail-bank{zoom:.76;top:22px!important}
   .acboard .rail-bank{zoom:.64;top:18px!important}
-  .acboard .combo-unit{zoom:.54}
+  .acboard .combo-unit{zoom:.54;z-index:8}
   .acboard .lamp{zoom:.55}
   .acboard .motor{zoom:.48}
   .acboard .rod{zoom:.6}
@@ -37,7 +38,7 @@
   .hint{padding:4px 7px!important;font-size:.58rem!important;border-radius:8px!important;line-height:1.15!important}
   .progress{font-size:.59rem!important}
   .actions{gap:3px!important}
-  .actions button,.toolbar button{min-height:34px!important;padding:4px 7px!important;border-radius:8px!important;font-size:.63rem!important}
+  .actions button,.toolbar button{min-height:44px!important;padding:4px 7px!important;border-radius:8px!important;font-size:.63rem!important}
   .terminal{min-width:28px;min-height:28px}
   .terminal:before{content:"";position:absolute;inset:-13px;border-radius:50%}
 }
@@ -56,10 +57,11 @@
   .rect-box{left:65%!important;top:87px!important;transform:translateX(-50%) scale(.62)!important;transform-origin:top center!important}
   .double-module{left:65%!important;top:100px!important;transform:translateX(-50%) scale(.62)!important;transform-origin:top center!important}
   .toma-doble-app .board>.rod{left:3%!important;bottom:0!important;transform:scale(.75)!important;transform-origin:bottom left!important}
-  .toma-doble-app .board>.motor{right:7%!important;bottom:5%!important;transform:scale(.72)!important;transform-origin:bottom right!important}
+  .toma-doble-app .board>.motor{right:7%!important;bottom:7%!important;transform:scale(.72)!important;transform-origin:bottom right!important}
 }
 
 @media (max-width: 700px) and (orientation: portrait) {
+  html,body{width:100%;height:100%;overflow:hidden!important}
   body:after{content:"Gira el teléfono para practicar en posición horizontal";position:fixed;inset:0;z-index:999999;display:grid;place-items:center;padding:28px;background:radial-gradient(circle at 50% 25%,#183b5b,#06101d 72%);color:#f4f9ff;text-align:center;font:700 1.05rem/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
   body>main{visibility:hidden;pointer-events:none}
 }
