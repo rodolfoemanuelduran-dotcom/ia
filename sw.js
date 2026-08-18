@@ -1,5 +1,5 @@
 'use strict';
-const VERSION='2026-08-18.1';
+const VERSION='2026-08-18.2';
 const CACHE_PREFIX='simuladores-electricos-static-';
 const CACHE=`${CACHE_PREFIX}${VERSION}`;
 const SCOPE=self.registration.scope;
