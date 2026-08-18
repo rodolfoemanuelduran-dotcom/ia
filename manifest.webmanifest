@@ -1,0 +1,17 @@
+{
+  "name": "Simuladores de circuitos eléctricos",
+  "short_name": "Circuitos",
+  "description": "Laboratorio táctil para prácticas de electricidad en escuela secundaria.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#06101c",
+  "theme_color": "#071321",
+  "lang": "es-AR",
+  "icons": [
+    {"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}
